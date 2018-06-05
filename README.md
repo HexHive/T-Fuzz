@@ -51,7 +51,7 @@ $ workon tfuzz-env
 $ pip install -r req.txt
 ```
 
-# Fuzzing target programs
+# Fuzzing target programs with T-Fuzz
 
 ```
 $ ./TFuzz  --program  <path_to_target_program> --work_dir <work_dir> --target_opts <target_opts>
@@ -89,3 +89,7 @@ $ ./TFuzz  --program  target_programs/md5sum  --work_dir workdir_md5sum --target
 ```
 $ ./TFuzz  --program  target_programs/who  --work_dir workdir_who --target_opts "@@"
 ```
+
+# Using CrashAnalyzer to verify crashes
+
+Coming soon!
