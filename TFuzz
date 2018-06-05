@@ -1,0 +1,64 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import signal
+import argparse
+import logging
+
+from fuzzer import Fuzzer as __angr_Fuzzer
+
+from tfuzz.tfuzz_sys import TFuzzSys
+
+def main():
+
+    __angr_Fuzzer._perform_env_checks()
+    
+    parser = argparse.ArgumentParser(description='tfuzz user interface')
+    parser.add_argument('--program', required=True, help='path to the program to fuzz')
+    parser.add_argument('--work_dir', required=True, help='the work directory for tfuzz')
+    parser.add_argument('--seed_dir', help='the work directory of initial seeds')
+    parser.add_argument('--target_opts', help='The options to pass to the argument')
+    parser.add_argument('-v', "--verbose", help='Increase the logging verbosity',
+                        action='store_true')
+    parser.add_argument('--ph', default='@@', help='The place holder for input file to fuzz')
+
+    args = parser.parse_args()
+
+    if args.verbose:
+        logging.getLogger('tfuzz').setLevel(logging.DEBUG)
+
+    program = os.path.abspath(args.program)
+    print(program)
+    if not os.path.exists(program):
+        print("%s does not exist" % (args.program))
+        sys.exit(-1)
+    
+    work_dir = os.path.abspath(args.work_dir)
+    seeds = []
+    if args.seed_dir != None:
+        seed_dir = os.path.abspath(args.seed_dir)
+        if not os.path.exists(seed_dir):
+            print("%s does not exist" % (args.seed_dir))
+            sys.exit(-1)
+        for sf in os.listdir(seed_dir):
+            seeds.append(os.path.join(seed_dir, sf))
+
+    if args.target_opts != None:
+        argv = args.target_opts.split(' ')
+    else:
+        argv = None
+
+    tfuzzsys = TFuzzSys(program, work_dir, target_opts=argv,
+                        input_placeholder=args.ph, seed_files=seeds)
+
+    tfuzzsys.run()
+
+    def ctrlc_handler(signal, frame):
+        tfuzzsys.stop()
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, ctrlc_handler)
+
+if __name__ == '__main__':
+    main()
