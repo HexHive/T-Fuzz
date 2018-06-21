@@ -50,7 +50,6 @@ pathlib2==2.3.0
 pefile==2017.11.5
 pexpect==4.4.0
 pickleshare==0.7.4
-pkg-resources==0.0.0
 pluggy==0.6.0
 plumbum==1.6.6
 progressbar==2.3
