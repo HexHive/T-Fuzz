@@ -27,7 +27,7 @@ $ ./sys/install.sh
 ### installing pip and setting up virtualenv &  wrapper
 
 ```
-$ sudo apt-get install sudo apt-get install python-pip python-virtualenv
+$ sudo apt-get install python-pip python-virtualenv
 $ pip install virtualenvwrapper
 ```
 
