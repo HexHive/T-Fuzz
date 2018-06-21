@@ -5,6 +5,12 @@ T-Fuzz consists of 2 components:
 - Crash Analyzer (CrashAnalyzer): a tool that verifies whether crashes found transformed
   programs are true bugs in the original program or not (coming soon).
 
+
+# OS support
+
+The current version is tested only on Ubuntu-16.04, while trying to run the code,
+please use our tested OS.
+
 # Prerequisite
 
 T-Fuzz system is built on several opensource tools.
@@ -24,6 +30,18 @@ $ ./sys/install.sh
 
 ## Installing python libraries
 
+### installing some dependent libraries
+
+> Note: to use `apt-get build-dep`, you need to uncomment the deb-src lines in your apt source
+> file (/etc/apt/sources.list) and run apt-get update.
+
+```
+$ sudo apt-get install build-essential gcc-multilib libtool automake autoconf bison debootstrap debian-archive-keyring
+$ sudo apt-get build-dep qemu-system
+$ sudo apt-get install libacl1-dev
+```
+
+
 ### installing pip and setting up virtualenv &  wrapper
 
 ```
@@ -38,13 +56,15 @@ export WORKON_HOME=$HOME/.virtual_envs
 source /usr/local/bin/virtualenvwrapper.sh
 ```
 
-### Creating a virtual environment
+### Creating a python virtual environment
 
 ```
 $ mkvirtualenv tfuzz-env
 ```
 
 ### Installing dependent libraries
+
+This command will install all the dependent python libraries for you.
 
 ```
 $ workon tfuzz-env
