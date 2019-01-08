@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import re
 
 from fuzzer import Fuzzer as __angr_Fuzzer
 
@@ -9,9 +10,16 @@ def create_dict(binary, dict_filename):
                                       "bin", "create_dict.py")
     args = [sys.executable, create_dict_script, binary]
 
-    with open(dict_filename, 'wb') as df:
+    with open(dict_filename+'.org', 'wb') as df:
         p = subprocess.Popen(args, stdout=df)
         retcode = p.wait()
+    
+    out=open(dict_filename+'.org')
+    file=open(dict_filename,'w')
+    for line in out:
+	match=re.match(r"string_[\d]+=.+[\n]{0,1}",line)
+	if match:
+	    file.writelines(line)
 
     return retcode == 0 and os.path.getsize(dict_filename)
 
